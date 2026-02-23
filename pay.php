@@ -140,9 +140,10 @@ if (isset($_GET['status']) && $_GET['status'] == 'success' && $uuid && $linkData
     </style>
 
     <?php if ($linkData && $linkData['merchant'] === 'paypal'): ?>
-        <script
-            src="https://www.paypal.com/sdk/js?client-id=AWf9KL0KBi4GhT2rzRvazWLiDVxV8e1MwwSG6CrrM9Bh8gvdyfpG2vgcBxCrJQgXY5l3hiH3m774Q_e_&currency=USD"></script>
-    <?php endif; ?>
+        <!-- <script src="https://www.paypal.com/sdk/js?client-id=AWf9KL0KBi4GhT2rzRvazWLiDVxV8e1MwwSG6CrrM9Bh8gvdyfpG2vgcBxCrJQgXY5l3hiH3m774Q_e_&currency=USD"></script> -->
+       <script src="https://www.paypal.com/sdk/js?client-id=<?= $paypalClientId ?>&currency=USD"></script>
+
+        <?php endif; ?>
 
     <!-- GTM & LiveChat code remains here... -->
 </head>

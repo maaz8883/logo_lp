@@ -44,7 +44,6 @@ if (isset($_GET['status']) && $_GET['status'] == 'success' && $leadId && $linkDa
 
 // 5. Build View Data
 $packageData = getPackageFeatures($urlAmt);
-$paypalClientId = $linkData['brand']['paypal_client_id'] ?? 'AWf9KL0KBi4GhT2rzRvazWLiDVxV8e1MwwSG6CrrM9Bh8gvdyfpG2vgcBxCrJQgXY5l3hiH3m774Q_e_'; 
 
 ?>
 <!DOCTYPE html>
@@ -335,7 +334,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 
     <script src="api.js"></script>
+     <!--// test mode -->
+    <!-- <script src="https://www.paypal.com/sdk/js?client-id=AWRCRUFnNtXfdNCut8-YeeXQc7CDe-2FQmVt4jwPg3Cbl1TJ6pECsjdg8ITRSL-PPbIcVEOcmnptBAZe&currency=USD"></script>  -->
+    <!--// live mode-->
+    <!-- <script src="https://www.paypal.com/sdk/js?client-id=AWf9KL0KBi4GhT2rzRvazWLiDVxV8e1MwwSG6CrrM9Bh8gvdyfpG2vgcBxCrJQgXY5l3hiH3m774Q_e_&currency=USD"></script> -->
     <script src="https://www.paypal.com/sdk/js?client-id=<?= $paypalClientId ?>&currency=USD"></script>
+    <!-- <script src="https://www.paypal.com/sdk/js?client-id=<?= $paypalClientId ?>&currency=USD"></script> -->
     <script>
         paypal.Buttons({
             style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal' },

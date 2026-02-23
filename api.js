@@ -1,5 +1,5 @@
-// const API_BASE_URL = 'http://127.0.0.1:8000';
-const API_BASE_URL = 'https://elementdesignagency.com/crm';
+const API_BASE_URL = 'http://127.0.0.1:8000';
+// const API_BASE_URL = 'https://elementdesignagency.com/crm';
 
 /**
  * Helper to get value from localStorage
@@ -123,7 +123,8 @@ async function submitStep1(e) {
         brand_id,
         // Send package details if API supports it, otherwise it's just stored locally
         package_name: pkg,
-        package_amount: amt
+        package_amount: amt,
+        referrer_url: window.location.href 
     };
 
     try {
@@ -376,25 +377,67 @@ async function getLeadBrief(encryptedLeadId) {
  * Submit Lead Brief Form
  */
 async function submitLeadBrief(formData) {
-    const leadId = getLeadId();
-    if (!leadId) {
-        throw new Error('Session expired. Please start over.');
+    // Check if formData is already a FormData object or a plain object
+    const isFormDataObject = formData instanceof FormData;
+    
+    // Get encrypted_lead_id from URL or formData
+    let encryptedLeadId;
+    if (isFormDataObject) {
+        encryptedLeadId = formData.get('encrypted_lead_id');
+    } else {
+        encryptedLeadId = formData.encrypted_lead_id;
+    }
+    
+    if (!encryptedLeadId) {
+        const leadId = getLeadId();
+        if (!leadId) {
+            throw new Error('Session expired. Please start over.');
+        }
+        // Get encrypted lead ID
+        encryptedLeadId = await getEncryptedLeadId(leadId);
+        
+        // Add to formData
+        if (isFormDataObject) {
+            formData.append('encrypted_lead_id', encryptedLeadId);
+        } else {
+            formData.encrypted_lead_id = encryptedLeadId;
+        }
     }
 
-    // Get encrypted lead ID
-    const encryptedLeadId = await getEncryptedLeadId(leadId);
-
-    // Prepare data with encrypted_lead_id
-    const data = {
-        encrypted_lead_id: encryptedLeadId,
-        ...formData
-    };
-
     try {
-        const result = await apiRequest('/api/lead-brief', 'POST', data);
-        return result;
+        // If FormData (file upload), use different fetch config
+        if (isFormDataObject) {
+            const response = await fetch(`${API_BASE_URL}/api/lead-brief`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    // Don't set Content-Type for FormData - browser will set it with boundary
+                },
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                let errorData = {};
+                try { errorData = JSON.parse(errorText); } catch (e) { }
+
+                const message = errorData.message || errorData.error || `Error ${response.status}: ${errorText.substring(0, 100)}`;
+                throw new Error(message);
+            }
+
+            return await response.json();
+        } else {
+            // Plain object - use existing apiRequest
+            const data = {
+                encrypted_lead_id: encryptedLeadId,
+                ...formData
+            };
+            const result = await apiRequest('/api/lead-brief', 'POST', data);
+            return result;
+        }
     } catch (error) {
         console.error('Failed to submit lead brief:', error);
+        alert(`Submission Error: ${error.message}`);
         throw error;
     }
 }

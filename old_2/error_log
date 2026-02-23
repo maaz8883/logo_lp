@@ -1,1 +1,0 @@
-[19-Jan-2026 03:29:49 UTC] PHP Deprecated:  urlencode(): Passing null to parameter #1 ($string) of type string is deprecated in /home/elementdesignage/public_html/logoelementdesign.com/lp/payment-step.php on line 484

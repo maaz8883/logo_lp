@@ -7,6 +7,15 @@ if (!defined('CRM_API_URL')) {
 define('CRM_API_URL_PAYMENT', 'https://elementdesignagency.com/crm/api/payment-links/');
 define('BASE_URL', 'https://elementdesignagency.com/crm/');
 
+// live mode
+// $paypalClientId = 'AWf9KL0KBi4GhT2rzRvazWLiDVxV8e1MwwSG6CrrM9Bh8gvdyfpG2vgcBxCrJQgXY5l3hiH3m774Q_e_'; 
+
+// test mode 
+$paypalClientId = 'AWRCRUFnNtXfdNCut8-YeeXQc7CDe-2FQmVt4jwPg3Cbl1TJ6pECsjdg8ITRSL-PPbIcVEOcmnptBAZe'; 
+
+
+
+
 function PaymentDetails_uuid($uuid)
 {
     $url = CRM_API_URL_PAYMENT . $uuid;
@@ -69,77 +78,77 @@ function verifyPaymentWithCrm($id)
 }
 
 
-function getCloverCheckoutUrl($linkData, $packageName, $amount , $leadId = "",$type)
-{
-    $cloverKey = $linkData['brand']['clover_api_key'] ?? null;
-    $merchantId = $linkData['brand']['clover_merchant_id'] ?? null;
+// function getCloverCheckoutUrl($linkData, $packageName, $amount , $leadId = "",$type)
+// {
+//     $cloverKey = $linkData['brand']['clover_api_key'] ?? null;
+//     $merchantId = $linkData['brand']['clover_merchant_id'] ?? null;
 
-    if (!$cloverKey || !$merchantId) {
-        return ['error' => "Clover payment is not configured for this brand."];
-    }
+//     if (!$cloverKey || !$merchantId) {
+//         return ['error' => "Clover payment is not configured for this brand."];
+//     }
     
-    // return $linkData;
+//     // return $linkData;
 
-    $env = 'live';
-    $baseUrl = ($env === 'live' || $env === 'production') ? 'https://www.clover.com' : 'https://sandbox.dev.clover.com';
-    $amountCents = round($amount * 100);
-    $checkoutUrl = $baseUrl . '/invoicingcheckoutservice/v1/checkouts';
+//     $env = 'live';
+//     $baseUrl = ($env === 'live' || $env === 'production') ? 'https://www.clover.com' : 'https://sandbox.dev.clover.com';
+//     $amountCents = round($amount * 100);
+//     $checkoutUrl = $baseUrl . '/invoicingcheckoutservice/v1/checkouts';
     
-    if($type=="pkg"){
-       $success = "https://" . $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['PHP_SELF']), '/\\') . "/thank-you.php?status=success&id=" . $leadId . "&pkg=" . urlencode($packageName);
-    }else{
-        $success = "https://" . $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['PHP_SELF']), '/\\') . "/pay?status=success&id=" . $leadId;
+//     if($type=="pkg"){
+//        $success = "https://" . $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['PHP_SELF']), '/\\') . "/thank-you.php?status=success&id=" . $leadId . "&pkg=" . urlencode($packageName);
+//     }else{
+//         $success = "https://" . $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['PHP_SELF']), '/\\') . "/pay?status=success&id=" . $leadId;
 
-    }
+//     }
 
-    $payload = [
-        "currency" => "USD",
-        "totalAmount" => $amountCents,
-        "shoppingCart" => [
-            "lineItems" => [
-                [
-                    "name" => "Signup - " . ($packageName ?? "Custom Package"),
-                    "price" => $amountCents,
-                    "unitQty" => 1
-                ]
-            ]
-        ],  
-        "customer" => [ 
-            "email" => $linkData['customer_email'] ?? "",
-            "name" => $linkData['customer_name'] ?? "",   
-        ],
-        "redirectUrls" => [
-            "success" => $success,
-            "cancel" => "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . "?id=" . $leadId . "&pkg=" . urlencode($packageName) . "&amt=" . $amount,
-        ]
-    ]; 
+//     $payload = [
+//         "currency" => "USD",
+//         "totalAmount" => $amountCents,
+//         "shoppingCart" => [
+//             "lineItems" => [
+//                 [
+//                     "name" => "Signup - " . ($packageName ?? "Custom Package"),
+//                     "price" => $amountCents,
+//                     "unitQty" => 1
+//                 ]
+//             ]
+//         ],  
+//         "customer" => [ 
+//             "email" => $linkData['customer_email'] ?? "",
+//             "name" => $linkData['customer_name'] ?? "",   
+//         ],
+//         "redirectUrls" => [
+//             "success" => $success,
+//             "cancel" => "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . "?id=" . $leadId . "&pkg=" . urlencode($packageName) . "&amt=" . $amount,
+//         ]
+//     ]; 
     
-    // return $checkoutUrl;
+//     // return $checkoutUrl;
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $checkoutUrl);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . trim($cloverKey),
-        'Content-Type: application/json',
-        'Accept: application/json',
-        'X-Clover-Merchant-Id: ' . trim($merchantId)
-    ]);
+//     $ch = curl_init();
+//     curl_setopt($ch, CURLOPT_URL, $checkoutUrl);
+//     curl_setopt($ch, CURLOPT_POST, 1);
+//     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//     curl_setopt($ch, CURLOPT_HTTPHEADER, [
+//         'Authorization: Bearer ' . trim($cloverKey),
+//         'Content-Type: application/json',
+//         'Accept: application/json',
+//         'X-Clover-Merchant-Id: ' . trim($merchantId)
+//     ]);
 
-    $response = curl_exec($ch);
-    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $respData = json_decode($response, true);
-    curl_close($ch);
+//     $response = curl_exec($ch);
+//     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+//     $respData = json_decode($response, true);
+//     curl_close($ch);
 
-    if (($http_code === 200 || $http_code === 201) && isset($respData['href'])) {
-        return ['url' => $respData['href']];
-    }
+//     if (($http_code === 200 || $http_code === 201) && isset($respData['href'])) {
+//         return ['url' => $respData['href']];
+//     }
 
-    return ['error' => "Clover Error ($http_code): " . ($respData['message'] ?? $response)];
-}
+//     return ['error' => "Clover Error ($http_code): " . ($respData['message'] ?? $response)];
+// }
 
 
 function getBriefFormUrl($leadId, $baseUrl = null) {

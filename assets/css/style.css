@@ -483,7 +483,7 @@ section.first-banner .row {
 
 .first-banner-button ul li a {
     background: linear-gradient(163deg, #BE5264 5%, #BE5264 56%, #F8BB16 100%);
-    padding: 13px 22px;
+    padding: 10px 20px;
     border-radius: 21px;
     color: #fff;
     font-size: 17px;
@@ -530,7 +530,7 @@ section.first-banner .row {
     filter: brightness(50.5);
 }
 
-section.first-banner::before {
+/* section.first-banner::before {
     content: '';
     position: absolute;
     background-image: url(../images/banner1-before.png);
@@ -541,9 +541,9 @@ section.first-banner::before {
     background-repeat: no-repeat;
     right: 0;
     background-position: right;
-}
+} */
 
-section.first-banner::after {
+/* section.first-banner::after {
     content: '';
     position: absolute;
     background-image: url(../images/banner1-after.png);
@@ -554,7 +554,7 @@ section.first-banner::after {
     background-position: right;
     background-size: contain;
     top: 530px;
-}
+} */
 
 .first-banner-form::after {
     content: '';
@@ -607,7 +607,7 @@ section.first-banner::after {
 section.second-banner {
     position: relative;
     z-index: 1111;
-    padding: 170px 0 150px;
+    padding: 90px 0 150px;
 }
 
 .second-banner-marq {
@@ -615,7 +615,7 @@ section.second-banner {
     padding: 11px 20px;
     margin: 0 auto;
     border: 3px solid transparent;
-    border-radius: 20px;
+    border-radius: 30px;
     background: linear-gradient(#ffffff, #fff) padding-box, linear-gradient(144deg, #BE5264 80%, #F8BB16) border-box;
 }
 
@@ -628,7 +628,7 @@ section.second-banner {
 .second-banner-heading h1 {
     text-align: center;
     font-size: 50px;
-    font-weight: 600;
+    font-weight: 500;
     padding: 20px 0;
     color: #000;
 }
@@ -637,31 +637,36 @@ section.second-banner {
     background-image: linear-gradient(45deg, #BE5264 20%, #BE5264 50%, #F8BB16 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    font-weight: 600;
 }
 
 .second-banner .nav-tabs {
-    background-color: #000;
+    background-color: #ffffff;
     border-radius: 20px;
     margin: 10px 0;
     justify-content: center;
-    width: 96%;
+    width: auto;
     margin: 0 auto;
     margin-bottom: 20px;
     padding: 4px 0;
+    box-shadow: 1px 1px 8px #e1e1e1;
+    border: 0;
+    width: 88%;
 }
 
 .second-banner .nav-tabs.nav-link,
 .nav-tabs .nav-link.active {
     background: linear-gradient(163deg, #BE5264 5%, #BE5264 56%, #F8BB16 100%);
     border: none;
-    border-radius: 10px;
-    color: #fff;
+    border-radius: 20px;
+    color: #fff !important;
     font-size: 16px;
     font-weight: 600;
+    padding: 8;
 }
 
 .second-banner .nav-tabs .nav-link {
-    color: #fff;
+    color: #000000;
     font-weight: 500;
     font-size: 14px;
     margin: 0 2px;
@@ -669,8 +674,8 @@ section.second-banner {
 }
 
 .second-banner .nav-tabs .nav-link:hover {
-    border: 1px solid #fff;
-    border-radius: 10px;
+    /* border: 1px solid #fff; */
+    border-radius: 20px;
     transition: 0.5s;
 }
 
@@ -678,7 +683,7 @@ section.second-banner {
     margin: 10px 0;
 }
 
-.second-banner::before {
+/* .second-banner::before {
     content: '';
     position: absolute;
     background-image: url(../images/second-ball-before.png);
@@ -688,12 +693,13 @@ section.second-banner {
     top: -50px;
     left: 0;
     background-size: contain;
-}
+} */
 
 .second-banner::after {
     content: '';
     position: absolute;
-    background-image: url(../images/Ellipse-6363.png);
+    /* background-image: url(../images/Ellipse-6363.png); */
+    background-color: #fff;
     width: 100%;
     height: 100%;
     background-repeat: no-repeat;
@@ -734,7 +740,7 @@ section.first-banner video {
 /*packages page*/
 
 .pricing {
-    padding: 0px 0 60px;
+    padding: 90px 0 60px;
     position: relative;
 }
 
@@ -997,11 +1003,13 @@ section.first-banner video {
 /* Agency Section */
 .agency-section {
     padding: 80px 0;
-    /* background: #f1f1f1; */
+    background: #f9f1dc;
     overflow: hidden;
     position: relative;
 }
-
+section.agency-section .row{
+    align-items: center;
+}
 .agency-badge-wrapper {
     margin-bottom: 20px;
 }
@@ -1020,7 +1028,7 @@ section.first-banner video {
 }
 
 /*.agency-badge::before {*/
-/*    content: 'Ã¢â‚¬Â¢';*/
+/*    content: 'ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢';*/
 /*    color: #BE5264;*/
 /*    margin-right: 5px;*/
 /*    font-weight: bold;*/
@@ -1054,7 +1062,7 @@ section.first-banner video {
     color: #666;
     font-size: 16px;
     max-width: 800px;
-    margin: 0 auto 50px auto;
+    /* margin: 0 auto 50px auto; */
 }
 
 .agency-tree-container {
@@ -1197,11 +1205,12 @@ section.first-banner video {
 /* second css */
 
 section.brand-sec {
-    background-image: url(../images/bg.png);
+    /* background-image: url(../images/bg.png); */
+    background-color: #f9f1dc;
     background-size: cover;
     background-repeat: no-repeat;
     padding: 70px 0;
-    border-radius: 55px;
+    /* border-radius: 55px; */
     position: relative;
     z-index: 1;
 }
@@ -1222,16 +1231,26 @@ section.brand-sec {
     top: 30px;
 }
 
-.brand-button a {
+/* .brand-button a {
     border: 1px solid #fff;
     color: #fff;
     font-size: 15px;
     padding: 10px 15px;
     border-radius: 35px;
+} */
+.brand-button a{
+    padding: 8px 30px;
+    font-size: 18px;
+    color: #000;
+    position: relative;
+    display: inline-block;
+    font-weight: 500;
+    border: 3px solid transparent;
+    border-radius: 20px;
+    background: linear-gradient(#f9f1dc, #f9f1dc) padding-box, linear-gradient(144deg, #BE5264 80%, #F8BB16) border-box;
 }
-
 .brand-head h1 {
-    color: #ffff;
+    color: #000000;
     font-size: 38px;
     font-weight: 600;
     padding-bottom: 18px;
@@ -1239,24 +1258,24 @@ section.brand-sec {
 }
 
 .brand-head p {
-    color: #fff;
+    color: #000000;
     font-size: 15px;
 }
 
 .logo-brand h3 {
-    color: #ffff;
+    color: #000000;
     font-size: 25px;
     padding-bottom: 12px;
 }
 
 .logo-brand ul li a {
-    color: #fff;
+    color: #000000;
     font-size: 14px;
 }
 
 .logo-brand ul li {
     list-style: disc;
-    color: #fff;
+    color: #000000;
 }
 
 .logo-brand ul {
@@ -1299,13 +1318,15 @@ span.top-head {
 }
 
 .brand-image h1 {
-    color: #fff;
+    background: linear-gradient(181deg, #69518A, #BE5264, #f7b918);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     font-size: 125px;
     text-align: end;
 }
 
 .brand-image h3 {
-    color: #fff;
+    color: #000000;
     text-align: end;
     font-size: 27px;
 }
@@ -1315,7 +1336,7 @@ span.top-head {
 }
 
 footer.footer-sec {
-    padding-top: 20px;
+    padding-top: 90px;
     text-align: center;
 }
 
@@ -1347,13 +1368,14 @@ footer.footer-sec {
 }
 
 .bottom-footer {
-    background: linear-gradient(90deg, rgba(23, 23, 31, 1) 0%, rgba(176, 70, 78, 1) 50%);
+    /* background: linear-gradient(90deg, rgba(23, 23, 31, 1) 0%, rgba(176, 70, 78, 1) 50%); */
+    background-color: #000;
     padding: 20px 0;
     color: #fff;
 }
 
 section.platform-sec .row {
-    padding: 0px 0 175px;
+    padding: 110px 0 110px;
     align-items: center;
     display: flex;
 }
@@ -1416,7 +1438,8 @@ section.platform-sec::before {
 /* arsalan style start  */
 
 .third-sec {
-    background-image: url(../images/cta-add-banner.png);
+    /* background-image: url(../images/cta-add-banner.png); */
+    background: linear-gradient(178deg, #000000 5%, #000000 71%, #be5264 117%);
     padding: 80px 0px 80px;
     color: #fff;
     background-position: center;
@@ -1515,7 +1538,7 @@ h2.sub-title span {
 
 
 
-.third-sec::before {
+/* .third-sec::before {
     content: '';
     position: absolute;
     background-image: url(../images/cta-add-after.png);
@@ -1526,9 +1549,9 @@ h2.sub-title span {
     top: -100px;
     background-size: contain;
     background-position: right;
-}
+} */
 
-.third-sec::after {
+/* .third-sec::after {
     content: '';
     position: absolute;
     background-image: url(../images/cta-add-before.png);
@@ -1539,7 +1562,7 @@ h2.sub-title span {
     bottom: -130px;
     background-size: contain;
     background-position: left;
-}
+} */
 
 .pricing-heading h1 span {
     background-image: linear-gradient(45deg, #BE5264 20%, #BE5264 50%, #F8BB16 100%);
@@ -1569,16 +1592,18 @@ h2.sub-title span {
 .trees-logo-img ul li {
     display: flex;
     justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .trees-logo-img ul li img {
-    width: 156px;
-    margin: 10px;
+    width: 150px;
+    margin: 5px;
     box-shadow: 1px -1px 3px 1px #a1a1a1;
     border-radius: 100%;
 }
 
-.agency-section::after {
+/* .agency-section::after {
     content: '';
     position: absolute;
     background-image: url(../images/logo-agency-after.png);
@@ -1587,14 +1612,13 @@ h2.sub-title span {
     background-repeat: no-repeat;
     background-size: contain;
     background-position: right;
-    /* top: 0; */
     bottom: -70px;
     z-index: -1;
     right: 0;
-}
+} */
 
 
-.second-cta-add::after {
+/* .second-cta-add::after {
     content: '';
     position: absolute;
     background-image: url(../images/second-cta-after.png);
@@ -1606,7 +1630,7 @@ h2.sub-title span {
     background-size: contain;
     background-position: left;
     top: -100px;
-}
+} */
 
 .second-cta-add::before {
     display: none;
@@ -1672,7 +1696,7 @@ section.decide-sec .row {
     transition: 0.8s;
 }
 
-.platform-image::after {
+/* .platform-image::after {
     content: '';
     position: absolute;
     background-image: url(../images/platform-after.png);
@@ -1684,7 +1708,7 @@ section.decide-sec .row {
     z-index: -1;
     right: -155px;
     bottom: -110px;
-}
+} */
 
 .trees-logo-img {
     padding-top: 76px;
@@ -1727,7 +1751,7 @@ section.decide-sec .row {
 
 .first-banner-form form button {
     background: linear-gradient(163deg, #BE5264 5%, #BE5264 56%, #F8BB16 100%);
-    padding: 11px 39px;
+    padding: 10px 38px;
     border-radius: 21px;
     color: #fff;
     font-size: 17px;
@@ -2300,7 +2324,7 @@ section.decide-sec .row {
     -webkit-background-clip: text;
     -webkit-text-fill-color: #ffffff00;
 }
-
+/* 
 .pricing::after {
     content: '';
     position: absolute;
@@ -2310,15 +2334,14 @@ section.decide-sec .row {
     background-repeat: no-repeat;
     background-size: contain;
     background-position: right;
-    /* top: 0; */
     bottom: -70px;
     z-index: -1;
     right: 0;
-}
+} */
 
 
 
-.pricing::before {
+/* .pricing::before {
     content: '';
     position: absolute;
     background-image: url(../images/cta-add-after.png);
@@ -2329,7 +2352,7 @@ section.decide-sec .row {
     top: -100px;
     background-size: contain;
     background-position: right;
-}
+} */
 
 
 
@@ -2441,7 +2464,7 @@ button.next_arrow,
     padding-top: 40px;
 }
 
-.testimonial::before {
+/* .testimonial::before {
     content: '';
     position: absolute;
     background-image: url(../images/second-cta-after.png);
@@ -2453,14 +2476,14 @@ button.next_arrow,
     background-size: contain;
     background-position: left;
     top: -100px;
-}
+} */
 
 
 .testi_slider_wrap {
     position: relative;
 }
 
-.testi_slider_wrap:after {
+/* .testi_slider_wrap:after {
     content: '';
     position: absolute;
     background-image: url(../images/platform-after.png);
@@ -2470,9 +2493,8 @@ button.next_arrow,
     background-size: contain;
     background-position: bottom;
     z-index: -1;
-    /* right: -155px; */
     bottom: -110px;
-}
+} */
 /* testimonial slider */   
 
 

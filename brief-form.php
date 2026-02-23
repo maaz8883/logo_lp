@@ -144,6 +144,23 @@
             font-family: inherit;
         }
 
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px dashed #edeff2;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: #fbfbfb;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .form-group input[type="file"]:hover {
+            border-color: var(--accent-color);
+            background: #fff;
+        }
+
         .form-group input:focus,
         .form-group textarea:focus {
             border-color: var(--accent-color);
@@ -225,6 +242,51 @@
             color: #888;
             margin-top: 5px;
             display: block;
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+        }
+
+        .file-upload-label {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .file-upload-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 87, 34, 0.3);
+        }
+
+        .file-upload-label i {
+            margin-right: 8px;
+        }
+
+        .file-name-display {
+            font-size: 13px;
+            color: #666;
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .file-name-display.active {
+            display: block;
+        }
+
+        .file-name-display i {
+            color: var(--accent-color);
+            margin-right: 6px;
         }
 
         /* Read-only View Styles */
@@ -622,6 +684,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <label>Any additional comments or requirements:</label>
                         <textarea name="final_comments" rows="3"></textarea>
                     </div>
+                    <div class="form-group">
+                        <label>Attach Reference Files (Optional)</label>
+                        <div class="file-upload-wrapper">
+                            <label for="attachment" class="file-upload-label">
+                                <i class="fa fa-cloud-upload"></i>
+                                Choose File
+                            </label>
+                            <input type="file" name="attachment" id="attachment" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.zip" style="display: none;">
+                            <div id="fileNameDisplay" class="file-name-display">
+                                <i class="fa fa-file"></i>
+                                <span id="fileName">No file chosen</span>
+                            </div>
+                        </div>
+                        <span class="hint">Accepted formats: JPG, PNG, PDF, DOC, DOCX, ZIP (Max 10MB)</span>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn-submit">Submit Questionnaire</button>
@@ -632,6 +709,37 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="api.js?v=<?= time() ?>"></script>
     <script>
+        // File input handler - show selected file name
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('attachment');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            const fileNameSpan = document.getElementById('fileName');
+            
+            if (fileInput) {
+                fileInput.addEventListener('change', function(e) {
+                    if (this.files && this.files.length > 0) {
+                        const file = this.files[0];
+                        const fileName = file.name;
+                        const fileSize = (file.size / 1024 / 1024).toFixed(2); // Convert to MB
+                        
+                        // Check file size
+                        if (file.size > 10 * 1024 * 1024) { // 10MB
+                            alert('File size exceeds 10MB. Please choose a smaller file.');
+                            this.value = '';
+                            fileNameDisplay.classList.remove('active');
+                            return;
+                        }
+                        
+                        fileNameSpan.textContent = `${fileName} (${fileSize} MB)`;
+                        fileNameDisplay.classList.add('active');
+                    } else {
+                        fileNameSpan.textContent = 'No file chosen';
+                        fileNameDisplay.classList.remove('active');
+                    }
+                });
+            }
+        });
+        
         // Check if brief already exists on page load
         document.addEventListener('DOMContentLoaded', async function() {
             try {
@@ -798,6 +906,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             html += '<div class="section-title"><div class="section-number">10</div><h3>Additional Information</h3></div>';
             html += '<div class="detail-item"><div class="detail-label">Imagery Notes</div><div class="detail-value">' + formatValue(briefData.imagery_notes) + '</div></div>';
             html += '<div class="detail-item"><div class="detail-label">Additional Comments</div><div class="detail-value">' + formatValue(briefData.final_comments) + '</div></div>';
+            
+            // Show attachment if exists
+            if (briefData.attachment) {
+                const attachmentUrl = briefData.attachment_url || (API_BASE_URL + '/storage/' + briefData.attachment);
+                const fileName = briefData.attachment.split('/').pop();
+                html += '<div class="detail-item"><div class="detail-label">Attached File</div><div class="detail-value">';
+                html += '<a href="' + attachmentUrl + '" target="_blank" style="color: var(--accent-color); text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">';
+                html += '<i class="fa fa-paperclip"></i> ' + fileName;
+                html += '</a></div></div>';
+            }
+            
             html += '</div>';
             
             detailsContent.innerHTML = html;
@@ -827,26 +946,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             submitBtn.disabled = true;
 
             try {
-                // Gather all form data
+                // Create FormData object to handle file upload
                 const formData = new FormData(this);
-                const data = {};
                 
-                formData.forEach((value, key) => {
-                    // Handle array fields (like personality[])
-                    if (key.includes('[]')) {
-                        const cleanKey = key.replace('[]', '');
-                        if (!data[cleanKey]) data[cleanKey] = [];
-                        data[cleanKey].push(value);
-                    } else {
-                        // Only add non-empty values
-                        if (value && value.trim() !== '') {
-                            data[key] = value.trim();
-                        }
-                    }
-                });
-
-                // Submit to API
-                await submitLeadBrief(data);
+                // Get encrypted_lead_id from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const encryptedLeadId = urlParams.get('encrypted_lead_id');
+                
+                if (encryptedLeadId) {
+                    formData.append('encrypted_lead_id', encryptedLeadId);
+                }
+                
+                // Handle personality array - FormData automatically handles multiple values with same name
+                // No need to manually process it
+                
+                // Submit to API with FormData (will handle file upload)
+                await submitLeadBrief(formData);
 
                 // Success - show SweetAlert and reload page to show details
                 await Swal.fire({
