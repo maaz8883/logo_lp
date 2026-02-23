@@ -1,8 +1,5 @@
 <?php
-/**
- * Payment Step Page
- * Modularized Structure for better maintenance.
- */
+
 
 require_once 'packages.php';
 require_once 'payment-helpers.php';
@@ -16,7 +13,8 @@ $linkData = null;
 
 // 2. Data Fetching
 if (!empty($leadId)) {
-    $linkData = getPaymentDetails($leadId);
+    $paypalConfig = getPayPalConfigByLeadUuid($leadId);
+    $paypalClientId = $paypalConfig['client_id'];
 }
 
 // 3. Handle Clover Payment Submission
