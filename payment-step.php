@@ -35,6 +35,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_method']) && $_PO
     }
 }
 
+// 3b. Handle Square Payment Submission
+// if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_method']) && $_POST['pay_method'] === 'square' && $linkData) {
+    
+//     $checkout = getSquareCheckoutUrl($linkData, $urlPkg, $urlAmt , $leadId , "pkg");
+
+//     if (isset($checkout['url'])) {
+//         header("Location: " . $checkout['url']);
+//         exit;
+//     } else {
+//         $error = $checkout['error'];
+//     }
+// }
+
 // 4. Handle Post-Payment Redirection/Verification
 if (isset($_GET['status']) && $_GET['status'] == 'success' && $leadId && $linkData && $linkData['status'] == 'pending') {
     verifyPaymentWithCrm($leadId);
@@ -275,45 +288,45 @@ document.addEventListener("DOMContentLoaded", function () {
                         <div class="alert alert-danger mb-3 small"><?= htmlspecialchars($error) ?></div>
                     <?php endif; ?>
 
-                    <!--<div class="payment-tabs mb-4">-->
-                    <!--    <div class="btn-group w-100" role="group">-->
-                    <!--        <input type="radio" class="btn-check" name="payment_choice" id="pay_paypal" checked>-->
-                    <!--        <label class="btn btn-outline-primary" for="pay_paypal">PayPal</label>-->
+                    <!-- <div class="payment-tabs mb-4">
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="payment_choice" id="pay_paypal" checked>
+                            <label class="btn btn-outline-primary" for="pay_paypal">PayPal</label>
 
-                    <!--        <input type="radio" class="btn-check" name="payment_choice" id="pay_clover">-->
-                    <!--        <label class="btn btn-outline-primary" for="pay_clover">Credit / Debit Card</label>-->
-                    <!--    </div>-->
-                    <!--</div>-->
- 
+                            <input type="radio" class="btn-check" name="payment_choice" id="pay_square">
+                            <label class="btn btn-outline-primary" for="pay_square">Square</label>
+                        </div>
+                    </div>
+  -->
                     <div id="paypal-section">
                         <div id="paypal-button-container"></div>
                     </div>
 
-                    <div id="clover-section" style="display: none;">
+                    <div id="square-section" style="display: none;">
                         <form method="POST">
-                            <input type="hidden" name="pay_method" value="clover">
-                            <button type="submit" class="btn-pay" style="background: #28a745;">
-                                <span style="margin-right: 8px;">💳</span> Pay with Credit Card
+                            <input type="hidden" name="pay_method" value="square">
+                            <button type="submit" class="btn-pay" style="background: #006aff;">
+                                <span style="margin-right: 8px;">💳</span> Pay with Square
                             </button>
                         </form>
-                        <div class="text-center mt-3" style="margin-top:5px">
-                            <img src="https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@master/flat/visa.svg"
-                                height="24" class="mx-1">
-                            <img src="https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@master/flat/mastercard.svg"
-                                height="24" class="mx-1">
-                            <img src="https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@master/flat/amex.svg"
-                                height="24" class="mx-1">
-                            <img src="https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@master/flat/discover.svg"
-                                height="24" class="mx-1">
-                        </div>
                     </div>
 
                     <script>
                         document.addEventListener('DOMContentLoaded', () => {
-                            const pRadio = document.getElementById('pay_paypal'), cRadio = document.getElementById('pay_clover');
-                            const pSec = document.getElementById('paypal-section'), cSec = document.getElementById('clover-section');
-                            pRadio.addEventListener('change', () => { pSec.style.display = 'block'; cSec.style.display = 'none'; });
-                            cRadio.addEventListener('change', () => { pSec.style.display = 'none'; cSec.style.display = 'block'; });
+                            const pRadio = document.getElementById('pay_paypal'), 
+                                  sqRadio = document.getElementById('pay_square');
+                            const pSec = document.getElementById('paypal-section'), 
+                                  sqSec = document.getElementById('square-section');
+                            
+                            if (pRadio) pRadio.addEventListener('change', () => { 
+                                pSec.style.display = 'block'; 
+                                sqSec.style.display = 'none';
+                            });
+                            
+                            if (sqRadio) sqRadio.addEventListener('change', () => { 
+                                pSec.style.display = 'none'; 
+                                sqSec.style.display = 'block';
+                            });
                         });
                     </script>
                 </div>

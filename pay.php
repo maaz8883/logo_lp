@@ -2,8 +2,17 @@
 
 require_once 'payment-helpers.php';
 
-$baseCrmUrl = 'https://elementdesignagency.com/crm/';
+// $baseCrmUrl = 'https://elementdesignagency.com/crm/';
+$hostname = $_SERVER['HTTP_HOST'];
 
+if ($hostname === 'localhost' || $hostname === '127.0.0.1') {
+    $baseCrmUrl = 'http://127.0.0.1:8000/';
+} else {
+    $baseCrmUrl = 'https://elementdesignagency.com/crm/';
+}
+
+// echo $baseCrmUrl;
+// exit;
 
 $uuid = $_GET['id'] ?? null;
 $error = null;
@@ -23,20 +32,36 @@ if ($uuid) {
     $error = "No Payment ID provided.";
 }
 
-// Handle Payment Submission (Clover Only)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $linkData && $linkData['merchant'] === 'clover') {
-    // Otherwise, generate it now (Fallback)
+// Handle Payment Submission (Clover)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_method']) && $_POST['pay_method'] === 'clover' && $linkData) {
     $cloverKey = $linkData['brand']['clover_api_key'] ?? null;
     $merchantId = $linkData['brand']['clover_merchant_id'] ?? null;
 
     if (!$cloverKey || !$merchantId) {
         $error = "Clover payment is not configured for this brand.";
     } else {
-
         $checkout = getCloverCheckoutUrl($linkData, $linkData['custom_service'], $linkData['amount'],$uuid,'link');
        
-    //   echo $checkout;
-    //   exit;
+        if(isset($checkout['url'])) {
+            header("Location: " . $checkout['url']);
+            exit;
+        } else {
+            $error = $checkout['error'];
+        }
+    }
+}
+
+// print_r($linkData);
+
+// Handle Payment Submission (Square)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_method']) && $_POST['pay_method'] === 'square' && $linkData) {
+    $squareAccessToken = $linkData['brand']['square_access_token'] ?? null;
+    $squareLocationId = $linkData['brand']['square_location_id'] ?? null;
+
+    if (!$squareAccessToken || !$squareLocationId) {
+        $error = "Square payment is not configured for this brand.";
+    } else {
+        $checkout = getSquareCheckoutUrl($linkData, $linkData['custom_service'], $linkData['amount'], $uuid, 'link');
        
         if(isset($checkout['url'])) {
             header("Location: " . $checkout['url']);
@@ -54,6 +79,9 @@ if (isset($_GET['status']) && $_GET['status'] == 'success' && $uuid && $linkData
  verifyPaymentWithCrm($uuid);
     // exit;
 }
+
+// print_r($linkData);
+// exit;
 
 ?>
 <!DOCTYPE html>
@@ -376,6 +404,15 @@ document.addEventListener("DOMContentLoaded", function () {
                         <span class="info-value">Payment Successful</span>
                     </div>
                 </div>
+                
+                <?php if($linkData['sale_type'] == "front"){ ?>
+
+            <a href="brief-form.php?encrypted_lead_id=<?php echo $linkData['lead_uuid']; ?>"  class="btn-home">Fill Brief Form</a>
+
+
+                <?php } ?>
+
+
     
             </div>
      
@@ -415,56 +452,82 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
 
             <div class="payment-buttons">
-                <?php if ($linkData['merchant'] === 'clover'): ?>
-                    <form method="POST">
-                        <button type="submit" class="btn-black-style">
-                            <span class="btn-icon-card">💳</span> Debit or Credit Card
+                <!-- PayPal Payment Option -->
+                <?php if (!empty($paypalClientId)): ?>
+                    <div id="paypal-button-container"></div>
+                <?php endif; ?>
+
+                <!-- Square Payment Option -->
+                <?php 
+                $squareAccessToken = $linkData['brand']['square_access_token'] ?? null;
+                $squareLocationId = $linkData['brand']['square_location_id'] ?? null;
+                
+                // Debug: Show what we have
+                // echo "<!-- Square Debug: Token=" . (!empty($squareAccessToken) ? 'YES' : 'NO') . ", Location=" . (!empty($squareLocationId) ? 'YES' : 'NO') . " -->";
+                
+                if (!empty($squareAccessToken) && !empty($squareLocationId)): 
+                ?>
+                    <!-- <form method="POST" style="margin-top: 10px;">
+                        <input type="hidden" name="pay_method" value="square">
+                        <button type="submit" class="btn-black-style" style="background: #006aff; width: 100%;">
+                            <span class="btn-icon-card">💳</span> Pay with Square
+                        </button>
+                    </form> -->
+                <?php else: ?>
+                    <!-- Square not configured, showing placeholder for testing -->
+                    <form method="POST" style="margin-top: 10px;">
+                        <input type="hidden" name="pay_method" value="square">
+                        <button type="submit" class="btn-black-style" style="background: #006aff; width: 100%;">
+                            <span class="btn-icon-card">💳</span> Pay with Square
                         </button>
                     </form>
-
-                <?php elseif ($linkData['merchant'] === 'paypal'): ?>
-                    <div id="paypal-button-container"></div>
-                    <script>
-                        paypal.Buttons({
-                            style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal' },
-                            createOrder: function (data, actions) {
-                                return actions.order.create({
-                                    purchase_units: [{
-                                        amount: { value: '<?php echo $linkData['amount']; ?>' },
-                                        description: 'Payment for Invoice #<?php echo substr($linkData['uuid'], 0, 8); ?>'
-                                    }]
-                                });
-                            },
-                            onApprove: function (data, actions) {
-                                return actions.order.capture().then(function (details) {
-                                    document.getElementById('payment-loader').style.display = 'flex';
-                                    const orderID = data.orderID;
-                                    const verifyUrl = '<?php echo $baseCrmUrl . 'api/payment-links/' . $uuid . '/verify'; ?>';
-
-                                    fetch(verifyUrl, {
-                                        method: 'POST',
-                                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                                        body: JSON.stringify({ orderID: orderID })
-                                    })
-                                        .then(response => response.json())
-                                        .then(data => {
-                                            if (data.status === 'success') {
-                                                window.location.href = "?status=success&id=<?php echo $uuid; ?>";
-                                            } else {
-                                                document.getElementById('payment-loader').style.display = 'none';
-                                                alert('Payment verification failed: ' + (data.error || 'Unknown error'));
-                                            }
-                                        })
-                                        .catch(error => {
-                                            document.getElementById('payment-loader').style.display = 'none';
-                                            alert('An error occurred while verifying the payment.');
-                                        });
-                                });
-                            }
-                        }).render('#paypal-button-container');
-                    </script>
+                    <small style="color: #999; display: block; text-align: center; margin-top: 5px;">
+                        (Square credentials not configured in backend)
+                    </small>
                 <?php endif; ?>
             </div>
+
+            <?php if (!empty($paypalClientId)): ?>
+            <script>
+                paypal.Buttons({
+                    style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal' },
+                    createOrder: function (data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: { value: '<?php echo $linkData['amount']; ?>' },
+                                description: 'Payment for Invoice #<?php echo substr($linkData['uuid'], 0, 8); ?>'
+                            }]
+                        });
+                    },
+                    onApprove: function (data, actions) {
+                        return actions.order.capture().then(function (details) {
+                            document.getElementById('payment-loader').style.display = 'flex';
+                            const orderID = data.orderID;
+                            const verifyUrl = '<?php echo $baseCrmUrl . 'api/payment-links/' . $uuid . '/verify'; ?>';
+
+                            fetch(verifyUrl, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                                body: JSON.stringify({ orderID: orderID })
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.status === 'success') {
+                                        window.location.href = "?status=success&id=<?php echo $uuid; ?>";
+                                    } else {
+                                        document.getElementById('payment-loader').style.display = 'none';
+                                        alert('Payment verification failed: ' + (data.error || 'Unknown error'));
+                                    }
+                                })
+                                .catch(error => {
+                                    document.getElementById('payment-loader').style.display = 'none';
+                                    alert('An error occurred while verifying the payment.');
+                                });
+                        });
+                    }
+                }).render('#paypal-button-container');
+            </script>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
     <script src="api.js"></script>

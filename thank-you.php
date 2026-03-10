@@ -432,7 +432,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Call submitStep5 for Clover payment success (similar to PayPal)
         if (paymentStatus === 'success' && leadId && leadId !== 'N/A') {
             // Call submitStep5 to sync package details with CRM
-            submitStep5(packageName).catch(error => {
+            submitStep5(leadId,packageName).catch(error => {
                 console.error('Error syncing step 5:', error);
                 // Don't show error to user, just log it 
             });

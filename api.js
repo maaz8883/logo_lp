@@ -261,7 +261,8 @@ async function submitStep4() {
  * Step 5: Package Selection (CRM Sync)
  */
 async function submitStep5(leadIdOverride, pkgOverride) {
-    const leadId = getLeadId();
+    // const leadId = getLeadId();
+    const leadId = leadIdOverride;
     if (!leadId) return;
 
     const { pkg: storedPkg } = getPackageDetails();
