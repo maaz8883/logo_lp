@@ -475,7 +475,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </form> -->
                 <?php else: ?>
                     <!-- Square not configured, showing placeholder for testing -->
-                    <form method="POST" style="margin-top: 10px;">
+                    <!-- <form method="POST" style="margin-top: 10px;">
                         <input type="hidden" name="pay_method" value="square">
                         <button type="submit" class="btn-black-style" style="background: #006aff; width: 100%;">
                             <span class="btn-icon-card">💳</span> Pay with Square
@@ -483,7 +483,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </form>
                     <small style="color: #999; display: block; text-align: center; margin-top: 5px;">
                         (Square credentials not configured in backend)
-                    </small>
+                    </small> -->
                 <?php endif; ?>
             </div>
 
