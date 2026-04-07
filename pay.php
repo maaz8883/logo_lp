@@ -11,6 +11,9 @@ if ($hostname === 'localhost' || $hostname === '127.0.0.1') {
     $baseCrmUrl = 'https://elementdesignagency.com/crm/';
 }
 
+$stripeIntentScriptDir = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+$stripeIntentPaymentUrl = ($stripeIntentScriptDir === '' ? '' : $stripeIntentScriptDir) . '/stripe-payment-intent.php';
+
 // echo $baseCrmUrl;
 // exit;
 
@@ -604,7 +607,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 var fd = new FormData();
                 fd.append('uuid', uuid);
-                fetch('stripe-payment-intent.php', { method: 'POST', body: fd })
+                fetch(new URL(<?= json_encode($stripeIntentPaymentUrl) ?>, window.location.origin).toString(), { method: 'POST', body: fd })
                     .then(function (r) { return r.json(); })
                     .then(function (data) {
                         if (data.error || !data.clientSecret) {

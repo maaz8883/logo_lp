@@ -48,6 +48,10 @@ if (!empty($leadId)) {
     }
 }
 
+// Stripe intent URL from server (pretty URLs e.g. /lp/payment-step can break relative fetch paths on live)
+$stripeIntentScriptDir = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+$stripeIntentLeadUrl = ($stripeIntentScriptDir === '' ? '' : $stripeIntentScriptDir) . '/stripe-payment-intent-lead.php';
+
 // 3. Handle Clover Payment Submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_method']) && $_POST['pay_method'] === 'clover' && $linkData) {
     
@@ -457,7 +461,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fd.append('amount', amt);
         fd.append('pkg', pkg || '');
 
-        fetch('stripe-payment-intent-lead.php', { method: 'POST', body: fd })
+        fetch(new URL(<?= json_encode($stripeIntentLeadUrl) ?>, window.location.origin).toString(), { method: 'POST', body: fd })
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 if (data.error || !data.clientSecret) {
