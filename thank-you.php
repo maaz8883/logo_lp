@@ -368,30 +368,51 @@ body { padding-bottom: 82px; }
 /* Responsive for Order Confirmation Card */
 @media (max-width: 600px) {
   .order-confirm-card {
-    padding: 1.25rem 1rem !important;
+    padding: 1rem 0.85rem !important;
+    margin: 15px auto 10px !important;
   }
   .order-confirm-header {
     flex-direction: column !important;
     text-align: center !important;
-    gap: 1rem !important;
+    gap: 0.75rem !important;
+    margin-bottom: 1rem !important;
+  }
+  .order-confirm-header > div:first-child {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  .order-confirm-header > div:first-child i {
+    font-size: 20px !important;
   }
   .order-confirm-header h1 {
-    font-size: 22px !important;
+    font-size: 20px !important;
+    margin-bottom: 4px !important;
   }
   .order-confirm-header p {
-    font-size: 13px !important;
+    font-size: 12px !important;
+    line-height: 1.4 !important;
   }
   .order-details-grid {
     grid-template-columns: 1fr !important;
-    gap: 0.75rem !important;
+    gap: 0 !important;
+    padding: 0.75rem !important;
   }
   .order-details-grid > div {
     border: none !important;
-    padding: 0.75rem 0 !important;
+    padding: 0.5rem 0 !important;
     border-bottom: 1px solid #e0e0e0 !important;
+    text-align: left !important;
   }
   .order-details-grid > div:last-child {
     border-bottom: none !important;
+    padding-bottom: 0 !important;
+  }
+  .order-details-grid > div > div:first-child {
+    font-size: 10px !important;
+    margin-bottom: 3px !important;
+  }
+  .order-details-grid > div > div:last-child {
+    font-size: 14px !important;
   }
 }
 </style>
@@ -416,7 +437,7 @@ body { padding-bottom: 82px; }
 <!-- ══════════════════════════════════════
      ORDER CONFIRMATION SECTION (COMPACT)
 ══════════════════════════════════════ -->
-<div style="max-width: 700px; margin: 30px auto 40px; padding: 0 20px;">
+<div style="max-width: 700px; margin: 20px auto 15px; padding: 0 20px;">
   <div class="order-confirm-card" style="background: #fff; border-radius: 20px; padding: 1.75rem 2rem; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid #ebe9e4;">
     
     <div class="order-confirm-header" style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem;">
@@ -454,7 +475,7 @@ body { padding-bottom: 82px; }
 <!-- ══════════════════════════════════════
      SCROLL DOWN INDICATOR
 ══════════════════════════════════════ -->
-<div style="text-align: center; margin: 25px auto 35px; padding: 0 20px;">
+<div style="text-align: center; margin: 15px auto 25px; padding: 0 20px;">
   <p style="font-size: 12px; color: #999; font-weight: 600; margin-bottom: 10px; letter-spacing: 1px; text-transform: uppercase;">Scroll Down for Exclusive Add-ons</p>
   <div class="scroll-arrow" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #BE5264 0%, #e07a8c 100%); box-shadow: 0 4px 12px rgba(190,82,100,0.2);">
     <i class="fa fa-chevron-down" style="font-size: 18px; color: #fff;"></i>
