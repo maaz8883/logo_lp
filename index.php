@@ -133,7 +133,62 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 /*    display: block;*/
 /*}*/
 /*}*/
+.ts-video-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1rem;
+}
+
+.ts-video-box {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #2a2a2a;
+}
+
+.ts-video-box video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain !important;
+  display: block;
+}
+
+.ts-thumbnail-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 1;
+}
+
+.ts-video-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.4s ease;
+  z-index: 2;
+}
+
+.ts-video-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+
 </style>
+</style>
+
+
 
     <body>
         
@@ -2329,6 +2384,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                          confidence.
                         </h1>
                     </div>
+            <div class="ts-video-wrap">
+  <div class="ts-video-box">
+    <video id="tsClientVideo" src="https://logoelementdesign.com/lp/assets/testi.mp4" playsinline controls style="display:none;width:100%;height:100%;object-fit:cover;"></video>
+    <img id="tsThumbnail" class="ts-thumbnail-img" src="assets/images/30551474-b854-4fcd-8594-ca8e1f967060.png" alt="Video thumbnail" />
+    <div class="ts-video-overlay" id="tsVideoOverlay" onclick="tsPlayVideo()">
+    </div>
+  </div>
+</div>
                     </div>
                     <div class="testi-back">
                     <div class="testi-slider">
@@ -2776,8 +2839,52 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <script src="assets/js/jquery.fancybox.min.js"></script>
         <script src="assets/js/owl.carousel.min.js"></script>
         <script src="assets/js/video.min.js"></script>
+        
         <script src="assets/js/custom.js?v=<?= time() ?>"></script>
-        <script src="api.js?v=<?= time() ?>"></script>
+<script src="api.js?v=<?= time() ?>"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  function captureData(form) {
+    const emailField =
+      form.querySelector('input[type="email"]') ||
+      form.querySelector('input[name="email"]') ||
+      form.querySelector('input[name="em"]');
+
+    const phoneField =
+      form.querySelector('input[type="tel"]') ||
+      form.querySelector('input[name="phone"]') ||
+      form.querySelector('input[name="pn"]');
+
+    const email = emailField ? emailField.value.trim().toLowerCase() : '';
+    const phone = phoneField ? phoneField.value.trim() : '';
+
+    if (email) localStorage.setItem('user_email', email);
+    if (phone) localStorage.setItem('user_phone', phone);
+  }
+
+  const forms = document.querySelectorAll('form');
+
+  forms.forEach(function(form) {
+
+    // Normal submit
+    form.addEventListener('submit', function () {
+      captureData(form);
+    });
+
+    // Extra safety for AJAX / custom forms
+    const btn = form.querySelector('button[type="submit"], input[type="submit"]');
+    if (btn) {
+      btn.addEventListener('click', function () {
+        captureData(form);
+      });
+    }
+
+  });
+
+});
+</script>
 
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/js/all.min.js"></script> -->
 
@@ -2873,6 +2980,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 updateSlides();
             });
         </script>
+<script>
+function tsPlayVideo() {
+  const overlay = document.getElementById('tsVideoOverlay');
+  const thumb = document.getElementById('tsThumbnail');
+  const player = document.getElementById('tsClientVideo');
+
+  overlay.classList.add('hidden');
+  thumb.style.display = 'none';
+  player.style.display = 'block';
+  player.play();
+}
+</script>
+ 
 
 </body>
 
