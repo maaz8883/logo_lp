@@ -57,6 +57,31 @@ body {
 }
 
 /* ─────────────────────────────────────────
+   SCROLL DOWN ANIMATION
+───────────────────────────────────────── */
+.scroll-arrow {
+  animation: bounce 2s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.scroll-arrow:hover {
+  animation-play-state: paused;
+  transform: scale(1.1);
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-12px);
+  }
+  60% {
+    transform: translateY(-6px);
+  }
+}
+
+/* ─────────────────────────────────────────
    HEADER
 ───────────────────────────────────────── */
 header {
@@ -83,125 +108,12 @@ header .phone {
 header .phone:hover { color: var(--brand-dark); }
 
 /* ─────────────────────────────────────────
-   MODAL OVERLAY
-───────────────────────────────────────── */
-.overlay {
-  position: fixed; inset: 0; z-index: 200;
-  background: rgba(10, 6, 6, 0.65);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  animation: fadeIn 0.3s ease;
-}
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-.modal {
-  background: #fff;
-  border-radius: var(--radius-xl);
-  border: 1px solid #ebe9e4;
-  padding: 2.25rem 2rem 1.75rem;
-  max-width: 430px;
-  width: 100%;
-  text-align: center;
-  animation: slideUp 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 24px 60px rgba(0,0,0,0.18);
-}
-@keyframes slideUp {
-  from { transform: translateY(28px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
-}
-
-.check-circle {
-  width: 72px; height: 72px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--brand) 0%, #e07a8c 100%);
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 1.25rem;
-  box-shadow: 0 8px 24px rgba(190,82,100,0.35);
-  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.15s both;
-}
-@keyframes popIn {
-  from { transform: scale(0); opacity: 0; }
-  to   { transform: scale(1); opacity: 1; }
-}
-.check-circle i { color: #fff; font-size: 28px; }
-
-.modal h1 {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--brand);
-  margin-bottom: 8px;
-}
-.modal .sub {
-  font-size: 13.5px;
-  color: #6b6b6b;
-  line-height: 1.65;
-  margin-bottom: 1.5rem;
-}
-
-.order-meta {
-  background: #faf9f7;
-  border: 1px solid #ebe9e4;
-  border-radius: var(--radius-md);
-  padding: 1rem 1.1rem;
-  margin-bottom: 1.5rem;
-  text-align: left;
-}
-.meta-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 7px 0;
-  border-bottom: 1px solid #ebe9e4;
-  font-size: 13.5px;
-}
-.meta-row:last-child { border-bottom: none; padding-bottom: 0; }
-.meta-label { color: #888; font-weight: 500; }
-.meta-val   { font-weight: 600; color: var(--brand); }
-.status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--success); margin-right: 5px; }
-
-.modal-btns { display: flex; flex-direction: column; gap: 10px; }
-
-.btn-primary {
-  display: block; width: 100%;
-  padding: 13px;
-  background: linear-gradient(135deg, var(--brand) 0%, #d4667a 100%);
-  color: #fff;
-  font-family: 'Outfit', sans-serif;
-  font-size: 14px; font-weight: 600;
-  border: none; border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
-}
-.btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(190,82,100,0.35);
-}
-
-.btn-ghost {
-  display: block; width: 100%;
-  padding: 11px;
-  background: transparent;
-  font-family: 'Outfit', sans-serif;
-  font-size: 13px; font-weight: 500;
-  color: #888;
-  border: 1px solid #ddd;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  text-decoration: none;
-  transition: background 0.15s, color 0.15s;
-}
-.btn-ghost:hover { background: #f4f2ef; color: #444; }
-
-/* ─────────────────────────────────────────
    ADDONS PAGE
 ───────────────────────────────────────── */
 .addons-page {
   max-width: 920px;
   margin: 0 auto;
-  padding: 2.5rem 1.25rem 2.5rem;
+  padding: 0 1.25rem 2.5rem;
 }
 
 .page-header { text-align: center; margin-bottom: 2rem; }
@@ -440,7 +352,7 @@ body { padding-bottom: 82px; }
 ───────────────────────────────────────── */
 @media (max-width: 600px) {
   header { padding: 14px 18px; }
-  .addons-page { padding: 1.5rem 0.85rem 2rem; }
+  .addons-page { padding: 0 0.85rem 2rem; }
   .page-header h2 { font-size: 22px; }
   .checkout-bar { padding: 12px 16px; width:100%;}
   .bar-left strong { font-size: 20px; }
@@ -450,6 +362,37 @@ body { padding-bottom: 82px; }
   .modal { padding: 1.75rem 1.25rem 1.5rem; }
   .footer-inner { flex-direction: column; align-items: flex-start; padding: 22px 18px; }
   .footer-copy-bar { padding: 12px 18px; }
+}
+</style>
+<style>
+/* Responsive for Order Confirmation Card */
+@media (max-width: 600px) {
+  .order-confirm-card {
+    padding: 1.25rem 1rem !important;
+  }
+  .order-confirm-header {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 1rem !important;
+  }
+  .order-confirm-header h1 {
+    font-size: 22px !important;
+  }
+  .order-confirm-header p {
+    font-size: 13px !important;
+  }
+  .order-details-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+  .order-details-grid > div {
+    border: none !important;
+    padding: 0.75rem 0 !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+  }
+  .order-details-grid > div:last-child {
+    border-bottom: none !important;
+  }
 }
 </style>
 </head>
@@ -471,42 +414,50 @@ body { padding-bottom: 82px; }
 </header>
 
 <!-- ══════════════════════════════════════
-     ORDER CONFIRMATION MODAL
+     ORDER CONFIRMATION SECTION (COMPACT)
 ══════════════════════════════════════ -->
-<div class="overlay" id="overlay">
-  <div class="modal">
-
-    <div class="check-circle">
-      <i class="fa fa-check"></i>
-    </div>
-
-    <h1>Order Confirmed!</h1>
-    <p class="sub">Thank you for choosing Logo Element Design. Our creative team has been notified and will begin working on your project immediately.</p>
-
-    <div class="order-meta">
-      <div class="meta-row">
-        <span class="meta-label">Order ID</span>
-        <span class="meta-val">#<?php echo $short_id; ?></span>
+<div style="max-width: 700px; margin: 30px auto 40px; padding: 0 20px;">
+  <div class="order-confirm-card" style="background: #fff; border-radius: 20px; padding: 1.75rem 2rem; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid #ebe9e4;">
+    
+    <div class="order-confirm-header" style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem;">
+      <div style="width: 60px; height: 60px; flex-shrink: 0; border-radius: 50%; background: linear-gradient(135deg, #BE5264 0%, #e07a8c 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(190,82,100,0.25);">
+        <i class="fa fa-check" style="color: #fff; font-size: 24px;"></i>
       </div>
-      <div class="meta-row">
-        <span class="meta-label">Package</span>
-        <span class="meta-val"><?php echo $safe_pkg; ?></span>
-      </div>
-      <div class="meta-row">
-        <span class="meta-label">Status</span>
-        <span class="meta-val"><span class="status-dot"></span>Payment Successful</span>
+      
+      <div style="flex: 1;">
+        <h1 style="font-size: 26px; font-weight: 700; color: #BE5264; margin: 0 0 6px 0; line-height: 1.2;">Order Confirmed!</h1>
+        <p style="font-size: 14px; color: #6b6b6b; margin: 0; line-height: 1.5;">Thank you for choosing Logo Element Design. Our team will begin working on your project immediately.</p>
       </div>
     </div>
 
-    <div class="modal-btns">
-      <button class="btn-primary" onclick="closeModal()">
-        View Exclusive Add-ons &rarr;
-      </button>
-      <a href="brief-form.php?encrypted_lead_id=<?php echo $safe_uuid; ?>" class="btn-ghost">
-        Skip &mdash; Go to Brief Form
-      </a>
+    <div class="order-details-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; background: #faf9f7; border-radius: 12px; padding: 1rem; border: 1px solid #ebe9e4;">
+      <div style="text-align: center;">
+        <div style="font-size: 11px; color: #888; font-weight: 500; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Order ID</div>
+        <div style="font-size: 16px; font-weight: 700; color: #BE5264;">#<?php echo $short_id; ?></div>
+      </div>
+      <div style="text-align: center; border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;">
+        <div style="font-size: 11px; color: #888; font-weight: 500; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Package</div>
+        <div style="font-size: 16px; font-weight: 700; color: #BE5264;"><?php echo $safe_pkg; ?></div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-size: 11px; color: #888; font-weight: 500; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Status</div>
+        <div style="font-size: 14px; font-weight: 600; color: #3B6D11; display: flex; align-items: center; justify-content: center; gap: 5px;">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background: #3B6D11;"></span>
+          Successful
+        </div>
+      </div>
     </div>
 
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCROLL DOWN INDICATOR
+══════════════════════════════════════ -->
+<div style="text-align: center; margin: 25px auto 35px; padding: 0 20px;">
+  <p style="font-size: 12px; color: #999; font-weight: 600; margin-bottom: 10px; letter-spacing: 1px; text-transform: uppercase;">Scroll Down for Exclusive Add-ons</p>
+  <div class="scroll-arrow" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #BE5264 0%, #e07a8c 100%); box-shadow: 0 4px 12px rgba(190,82,100,0.2);">
+    <i class="fa fa-chevron-down" style="font-size: 18px; color: #fff;"></i>
   </div>
 </div>
 
@@ -538,10 +489,10 @@ body { padding-bottom: 82px; }
     <strong><span class="currency">$</span><span class="amount" id="total-amount">0</span></strong>
   </div>
   <div class="bar-right">
-    <a href="brief-form.php?encrypted_lead_id=<?php echo $safe_uuid; ?>" class="s-skip">Skip</a>
+    <!-- <a href="brief-form.php?encrypted_lead_id=<?php echo $safe_uuid; ?>" class="s-skip">Skip</a> -->
     <button class="s-checkout" id="checkout-btn" disabled>
       <i class="fa fa-credit-card"></i>
-      Process to Next Step
+      Submit
     </button>
   </div>
 </div>
@@ -572,14 +523,6 @@ const PAY_STATUS   = '<?php echo htmlspecialchars($status, ENT_QUOTES, 'UTF-8');
 /* ── Sync CRM on success ── */
 if (PAY_STATUS === 'success' && LEAD_ID && LEAD_ID !== 'N/A') {
   submitStep5(LEAD_ID, PACKAGE_NAME).catch(err => console.error('CRM sync error:', err));
-}
-
-/* ── Modal ── */
-function closeModal() {
-  const ov = document.getElementById('overlay');
-  ov.style.opacity = '0';
-  ov.style.transition = 'opacity 0.25s';
-  setTimeout(() => ov.style.display = 'none', 260);
 }
 
 /* ── Addon data ── */
@@ -681,8 +624,8 @@ coBtn.addEventListener('click', async () => {
     // Call the addon API
     await submitAddons(LEAD_ID, addonsData);
 
-    // Success - redirect to brief form
-    window.location.href = 'brief-form.php?encrypted_lead_id=' + encodeURIComponent(LEAD_ID);
+    // Success - redirect to thanks.php
+    window.location.href = 'thanks.php?id=' + encodeURIComponent(LEAD_ID);
 
   } catch (error) {
     console.error('Addon submission error:', error);
@@ -690,7 +633,7 @@ coBtn.addEventListener('click', async () => {
     
     // Re-enable button
     coBtn.disabled = false;
-    coBtn.innerHTML = '<i class="fa fa-credit-card"></i> Process to Next Step';
+    coBtn.innerHTML = '<i class="fa fa-credit-card"></i> Submit';
   }
 });
 
